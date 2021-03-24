@@ -13,7 +13,7 @@ class VaccineOrder {
 
 	public:
 
-		bool canOrder(Campus campus);
+		bool canOrder(Station Station);
 		std::string getBrand();
 		double getPrice();
 		void order();

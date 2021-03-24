@@ -12,6 +12,8 @@ class Insurance
         bool hasInsurance();
         int getID(); 
     private: 
-        int insuranceId;l 
+        int insuranceId;
 
 };
+
+#endif

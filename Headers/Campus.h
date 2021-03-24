@@ -15,7 +15,9 @@ class Campus {
 		void setCampus();
 		bool isRegional(); 
 	private:
-	
+		int vaccinations; 
+		int revenue; 
+		int id; 
 };
 
 
