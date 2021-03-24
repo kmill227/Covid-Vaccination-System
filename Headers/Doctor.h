@@ -15,9 +15,11 @@ class Doctor
         void setStation(); 
         Station getStation(); 
         std::string getName();
+        void printSchedule(); 
     private: 
         std::string name; 
         int salary; 
         Station workingStation; 
+        Date workSchedule[30];
 };
 #endif

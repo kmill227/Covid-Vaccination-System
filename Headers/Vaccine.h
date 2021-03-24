@@ -2,6 +2,7 @@
 #define VACCINE_H
 
 #include <string>
+#include "Date.h"
 
 /************************
  * Class definition : Vaccine
@@ -12,11 +13,11 @@ class Vaccine {
 
 	public:
 
-		getBrand()
-		getPrice()
-		getId()
-		getDate()
-		getDoseNumber()
+		std::string getBrand();
+		double getPrice();
+		int getId();
+		Date getDate();
+		int getDoseNumber();
 
 	private:
 		std::string Brand;
