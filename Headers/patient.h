@@ -3,6 +3,12 @@
 #include "Appointment.h"
 #include "Vaccine.h"
 #include "Insurance.h"
+
+/************************
+ * Class definition : Patient
+ * @author Kaleb Miller, Robert Silvey, Anthony Telerico, Carter Smith
+ ************************/
+
 class Patient
 {
     public: 

@@ -2,6 +2,12 @@
 #define DOCTOR_H
 #include <string>
 #include "Station.h"
+
+/************************
+ * Class definition : Doctor
+ * @author Kaleb Miller, Robert Silvey, Anthony Telerico, Carter Smith
+ ************************/
+
 class Doctor
 {
     public: 
