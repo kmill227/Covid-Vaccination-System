@@ -12,8 +12,10 @@ class Patient
         bool vaccineCourseCompleted(); 
         bool hasAppointment(); 
     private:
+        int idNumber;
+        std::string name;
         Vaccine vaccination; 
-        Appointment appt; 
+        Appointment appts[2]; 
         Insurance insurancePolicy; 
 };
 #endif
