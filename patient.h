@@ -9,7 +9,7 @@ class Patient
         Insurance getInsurance(); 
         Appointment scheduledAppointment(); 
         Vaccine vaccineInfo(); 
-        bool courseCompleted(); 
+        bool vaccineCourseCompleted(); 
     private:
 };
 #endif
