@@ -14,9 +14,6 @@ class Station
     private: 
         int vaccinesOnHand;
         Campus location;
-
-
-
 };
 
 #endif
