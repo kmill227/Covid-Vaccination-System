@@ -1,0 +1,6 @@
+class appointment
+{
+    public: 
+
+    private: 
+};
