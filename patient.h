@@ -10,6 +10,10 @@ class Patient
         Appointment scheduledAppointment(); 
         Vaccine vaccineInfo(); 
         bool vaccineCourseCompleted(); 
+        bool hasAppointment(); 
     private:
+        Vaccine vaccination; 
+        Appointment appt; 
+        Insurance insurancePolicy; 
 };
 #endif
