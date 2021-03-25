@@ -1765,9 +1765,9 @@
 										"$ref": "AAAAAAF4OH4JdvZsONc="
 									},
 									"font": "Arial;13;0",
-									"left": 327,
+									"left": 323,
 									"top": 191,
-									"width": 92.14892578125,
+									"width": 100.80712890625,
 									"height": 13,
 									"alpha": 2.401548970500712,
 									"distance": 37.16180835212409,
@@ -1775,7 +1775,7 @@
 										"$ref": "AAAAAAF4OH4Jd/Zw1NE="
 									},
 									"edgePosition": 1,
-									"text": "+has_insurance"
+									"text": "+has_insurance()"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -3220,9 +3220,9 @@
 										"$ref": "AAAAAAF4OIJO1fwna98="
 									},
 									"font": "Arial;13;0",
-									"left": 223,
+									"left": 219,
 									"top": 359,
-									"width": 107.33251953125,
+									"width": 115.99072265625,
 									"height": 13,
 									"alpha": 4.455127967227767,
 									"distance": 65.30696746902278,
@@ -3230,7 +3230,7 @@
 										"$ref": "AAAAAAF4OIJO1fwrqds="
 									},
 									"edgePosition": 1,
-									"text": "+has_appointment"
+									"text": "+has_appointment()"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -5253,7 +5253,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF4OHXDEPNLZn4="
 							},
-							"name": "has_appointment",
+							"name": "has_appointment()",
 							"end1": {
 								"_type": "UMLAssociationEnd",
 								"_id": "AAAAAAF4OIJO1fwobJM=",
@@ -5597,7 +5597,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF4OHfylvRHbNw="
 							},
-							"name": "has_insurance",
+							"name": "has_insurance()",
 							"end1": {
 								"_type": "UMLAssociationEnd",
 								"_id": "AAAAAAF4OH4JdvZtht0=",
