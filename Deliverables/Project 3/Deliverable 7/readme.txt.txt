@@ -21,4 +21,4 @@ Deliverable 6:
 Deliverable 7: 
 	readme file
 Deliverable 8: 
-	Doxygen generated HTML index.
+	Doxygen generated HTML index and updated SRS.

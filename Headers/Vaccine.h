@@ -23,7 +23,7 @@ class Vaccine {
 		std::string Brand;
 		double price;
 		int id;
-		int date;
+		Date date;
 		int doseNumber;
 };
 
