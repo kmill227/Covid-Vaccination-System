@@ -16,10 +16,14 @@ class Patient
         Appointment scheduledAppointment(); 
         Vaccine vaccineInfo(); 
         bool vaccineCourseCompleted(); 
-        bool hasAppointment(); 
+        bool hasAppointment();
+        bool hasAccount(); 
+        void LogIn(); 
     private:
         int idNumber;
-        std::string name;
+        char name[256];
+        char email[256]; 
+        char password[256]; 
         Vaccine vaccination; 
         Appointment appts[2]; 
         Insurance insurancePolicy; 
