@@ -19,6 +19,7 @@ class Patient
         bool hasAppointment();
         bool hasAccount(); 
         void LogIn(); 
+        void output(); 
     private:
         int idNumber;
         char name[256];
