@@ -10,7 +10,7 @@
 class Alerts
 {
     public: 
-        void sendFlashAlert(); 
+        void sendAlert(); 
         void websiteNotification(); 
     private: 
         VaccineOrder delivery; 
