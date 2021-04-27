@@ -1,2 +1,5 @@
+import datetime
 class VaccineOrder:
-    pass
+    def __init__(self):
+        self.numberOrdered = 0
+        self.deliveryDate = 0

@@ -1,3 +1,4 @@
 class Vaccine:
     def __init__(self):
-        pass
+        self.brand = " "
+        self.requiredDoses = " "
