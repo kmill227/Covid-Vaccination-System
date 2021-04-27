@@ -1,3 +1,5 @@
 from User import User
 class Admin(User): 
-    pass
+
+    def __init__(self): 
+        super.__init__()
