@@ -59,7 +59,7 @@ bool Patient::hasAccount()
 
 void Patient::LogIn()
 {   
-    cout << "Email: \n";
+    cout << "Enter Log-in Info\nEmail: \n";
     cin >> email; 
     cout << "Password: \n";
     cin >> password; 
