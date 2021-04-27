@@ -1,0 +1,2 @@
+class Campus:
+    pass
