@@ -1,2 +1,8 @@
 class User: 
-    pass
+    
+    def __init__(self): 
+        self.email = " "
+        self.password = " "
+    
+    def logIn(self):
+        pass
