@@ -17,19 +17,21 @@ class Patient(User):
     def createAppointment(self):
         create = DataBase(
         CampusData = input("Select Campus")
+        VaccineData = cursor.fetchone()[5]
+
+
         DateData = input("Select Appointment Date")
-
         create.connection.cursor.execute(
-            "SELECT * FROM appointment WHERE Campus = (%s) AND AppointmentTime = (%s)",
+            "SELECT * FROM appointment WHERE Campus = (%s) AND AppointmentDate = (%s)",
             (CampusData, DateData)
-            )
+        )
 
+        AvailableTimes = 
         TimeData = input("Select Appointment Time")
-        DateTimeData = datetime.datetime(year = , month = , day = , hour = , minute =)
 
         create.connection.cursor.execute(
-            "INSERT INTO appointment (AppointmentTime, UserID, Campus, VaccineBrand) VALUES (%s, %s, %s, %s)",
-            (AppointmentData, self.id,)
+            "INSERT INTO appointment (AppointmentTime, AppointmentDate, UserID, Campus, VaccineBrand) VALUES (%s, %s, %s, %s, %s)",
+            (TimeData, DateData, self.id, CampusData, )
         )
 
     def followUpSchedule(self):
