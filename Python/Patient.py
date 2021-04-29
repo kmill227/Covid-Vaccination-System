@@ -15,9 +15,17 @@ class Patient(User):
         self.name = ""
 
     def createAppointment(self):
-        create = DataBase(
+        create = DataBase()
+        create.cursor.execute(
+            "SELECT CampusName FROM campus"
+            )
+        print(create.cursor.fetchall())
         CampusData = input("Select Campus")
-        VaccineData = cursor.fetchone()[5]
+        create.connection.cursor.execute(
+            "SELECT VaccineBrand FROM campus WHERE id = '%s'",
+            (CampusData)                             
+            )
+        VaccineData = create.cursor.fetchone()[5]
 
 
         DateData = input("Select Appointment Date")
@@ -26,13 +34,14 @@ class Patient(User):
             (CampusData, DateData)
         )
 
-        AvailableTimes = 
+        AvailableTimes = 123
         TimeData = input("Select Appointment Time")
-
+        
         create.connection.cursor.execute(
             "INSERT INTO appointment (AppointmentTime, AppointmentDate, UserID, Campus, VaccineBrand) VALUES (%s, %s, %s, %s, %s)",
-            (TimeData, DateData, self.id, CampusData, )
+            (TimeData, DateData, self.id, CampusData, VaccineData)
         )
+        
 
     def followUpSchedule(self):
         pass
@@ -49,4 +58,5 @@ class Patient(User):
         pass
 
     
-    
+test = Patient()
+test.createAppointment()
