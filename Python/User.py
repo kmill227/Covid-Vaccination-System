@@ -1,3 +1,4 @@
+from DataBaseConnection import DataBase
 class User: 
     
     def __init__(self): 
