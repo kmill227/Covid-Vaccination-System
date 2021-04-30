@@ -1,8 +1,8 @@
 from Alerts import Alerts
 from DataBaseConnection import DataBase
 class Campus:
-    def __init__(self):
-        self.name = " "
+    def __init__(self, name):
+        self.name = name
         self.vaccineCount = 0
         self.isRegional = 1 
         self.revenue = 0
