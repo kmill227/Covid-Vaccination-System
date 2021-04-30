@@ -5,9 +5,14 @@ class Alerts:
 
     def lowVaccines(self, Campus):
         db = DataBase()
-        db.cursor.execute("SELECT VaccinesOnHand FROM campus WHERE CampusName = '%s'", Campus)
-        VaccineCount = db.cursor.fetchall()
-        print(VaccineCount)
+        sql = "SELECT VaccinesOnHand FROM campus WHERE CampusName=%s"
+        arg = (Campus, )
+        db.cursor.execute(sql, arg)
+        vaccineCount = db.cursor.fetchone()
+        if vaccineCount == 0: 
+            self.sendEmail()
+        
+        
 
     def sendEmail(self):
         pass
