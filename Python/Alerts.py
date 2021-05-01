@@ -9,7 +9,3 @@ class Alerts:
 
     def displayOnMenu(self):
         pass
-
-
-a = Alerts()
-a.lowVaccines("Stark")
