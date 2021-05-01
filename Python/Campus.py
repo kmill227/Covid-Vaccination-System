@@ -9,11 +9,11 @@ class Campus:
         arg = (self.name, )
         db.cursor.execute(sql, arg)
         campusData = db.cursor.fetchall()
-        self.isRegional = campusData[1] 
-        self.vaccineCount = campusData[2]
-        self.vaccinesGiven = campusData[3]
-        self.revenue = campusData[4]
-        self.currentBrand = campusData[5]
+        self.isRegional = campusData[0][1] 
+        self.vaccineCount = campusData[0][2]
+        self.vaccinesGiven = campusData[0][3]
+        self.revenue = campusData[0][4]
+        self.currentBrand = campusData[0][5]
 
 
     def lowVaccines(self):

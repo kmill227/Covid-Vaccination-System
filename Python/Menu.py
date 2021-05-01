@@ -4,10 +4,16 @@ import User
 import Admin
 import Patient
 import Alerts
+import Campus
 
 class Menu:
     def __init__(self):
         self.currentUser = User.User()
+        self.campusNames = ["East Liverpool", "Geauga", "Kent", "Salem", "Stark", "Trumbull", "Tuscarawas"]
+        self.campusList = []
+        for i in campusNames:
+            campusList.append(campusNames[i])
+
 
     def LogInScreen(self):
         self.root = tk.Tk()
@@ -58,16 +64,36 @@ class Menu:
     def patientMenu(self): 
         self.root = tk.Tk()
         self.root.geometry('400x100')
-        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.currentUser.appointments[self.currentUser.dosesCompleted].createAppointment()])
-        button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=lambda:[self.root.destroy(), self.currentUser.appointments[self.currentUser.dosesCompleted].cancelAppointment()])
-        button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=lambda:[self.root.destroy(), self.currentUser.currentUser.appointments[self.currentUser.dosesCompleted].rescheduleAppointment()])
+        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=self.campusSelectMenu)
+        button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=self.cancelAppointmentMenu)
+        button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=self.rescheduleAppointmentMenu)
         button1.pack()
         button2.pack()
         button3.pack()
         self.root.mainloop()
 
-        
+    def campusSelectMenu(self):
+        self.root = tk.Tk()
+        self.root.geometry('400x100')
+        label = tk.Label(self.root, text="Select a Campus from the Dropdown Menu", width = 50)
+        selection = tk.StringVar()
+        selection.set(self.campusNames[0])
+        Dropdown = tk.OptionMenu(self.root, selection, *self.campusNames)
+        button = tk.Button(self.root, text="GO", width = 10)
+        label.pack()
+        Dropdown.pack()
+        button.pack()
+        self.root.mainloop()
+
+    def dateSelectMenu(self):
+        pass
+
+    def cancelAppointmentMenu(self): 
+        pass
+
+    def rescheduleAppointmentMenu(self):
+        pass
 
     
 menu = Menu()
-menu.patientMenu()
+menu.campusSelectMenu()
