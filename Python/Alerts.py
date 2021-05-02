@@ -5,7 +5,9 @@ class Alerts:
         
 
     def sendEmail(self):
+        #sends email to every registered user when new shipment delivered 
         pass
 
     def displayOnMenu(self):
+        #displays on menu when new shipment delivered
         pass
