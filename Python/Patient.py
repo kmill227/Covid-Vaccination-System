@@ -8,7 +8,7 @@ import datetime
 class Patient(User.User):
     
     def __init__(self):
-        super.__init__() 
+        super().__init__() 
         self.ins = Insurance.Insurance()
         self.vaccine = Vaccine.Vaccine()
         self.appointments = []

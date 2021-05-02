@@ -7,14 +7,13 @@ import Admin
 import Patient
 import Alerts
 import Campus
+from DatabaseConnection import DataBase 
 
 class Menu:
     def __init__(self):
         self.currentUser = User.User()
         self.campusNames = ["East Liverpool", "Geauga", "Kent", "Salem", "Stark", "Trumbull", "Tuscarawas"]
-        self.campusList = []
-        for i in range(7):
-            self.campusList.append(self.campusNames[i])
+
 
 
     def logInMenu(self):
@@ -42,7 +41,7 @@ class Menu:
                 adminMenu()
             else: 
                 self.currentUser = Patient.Patient()
-                patientMenu()
+                self.patientMenu()
         elif self.currentUser.flag == 0: 
             self.root = tk.Tk()
             self.root.geometry('200x100')
@@ -102,7 +101,7 @@ class Menu:
         self.root.mainloop()
 
     def dateSelectMenu(self, campus):
-
+        
         self.root = tk.Tk()
         self.root.title('Appointment Date Selection')
         self.root.geometry('600x600')
@@ -123,15 +122,41 @@ class Menu:
         if date.weekday() > 4:
             self.root = tk.Tk()
             self.root.geometry('200x100')
-            label = tk.Label(self.root, text="Pick a day Monday through Friday")
+            label = tk.Label(self.root, text="Pick a day between Monday & Friday")
             accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
             label.pack()
             accept.pack()
             self.root.mainloop()
-        for i in self.campusList:
-            if campus == i.name:
-                campusData = i
-                print(campusData.name)
+
+        db = Database()
+        sql = "SELECT AppointmentTime FROM appointment WHERE AppointmentDate=%s AND Campus =%s"
+        args = (date, campus)
+        db.cursor.execute(sql, args)
+        bookedAppts = db.cursor.fetchall()
+
+        validAppointments = []
+        hours = 8
+        minutes = 0
+        seconds = 0
+
+        for i in range(10):
+            hours += 1
+            minutes = 0
+        for i in range(6):
+            validAppointments.append(datetime.time(hours, minutes, seconds))
+            minutes += 10
+
+        self.root = tk.Tk()
+        self.root.geometry('600x600')
+        self.root.title('Time Selection')
+
+
+
+        
+
+
+                
+        
 
 
 
@@ -144,4 +169,4 @@ class Menu:
 
     
 menu = Menu()
-menu.patientMenu()
+menu.logInMenu()

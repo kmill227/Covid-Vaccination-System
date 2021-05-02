@@ -15,7 +15,7 @@ class Campus:
         self.vaccinesGiven = campusData[0][3]
         self.revenue = campusData[0][4]
         self.currentBrand = campusData[0][5]
-        self.order = VaccineOrder()
+        self.order = VaccineOrder.VaccineOrder()
 
 
     def lowVaccines(self):
