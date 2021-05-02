@@ -1,5 +1,4 @@
 import datetime
-import Patient
 import Campus
 class Appointment:
     def __init__(self):
@@ -8,12 +7,9 @@ class Appointment:
         self.campus = 0
         self.id = 0
 
-    def createAppointment(self):
+    def createAppointment(self, date, time, campus):
         pass
-        
-    def validAppointment(self):
-        pass
-    
+
     def followUpSchedule(self):
         pass
 

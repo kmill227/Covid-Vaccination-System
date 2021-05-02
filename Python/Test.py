@@ -10,19 +10,34 @@ args = (date, campus)
 db.cursor.execute(sql, args)
 bookedAppts = db.cursor.fetchall()
 
+
+
 validAppointments = []
-hours = 8
-minutes = 0
-seconds = 0
+k = 0
+seconds = 28800
 
-for i in range(10):
-    hours += 1
-    minutes = 0
-for i in range(6):
-    validAppointments.append(datetime.time(hours, minutes, seconds))
-    minutes += 10
+for i in range(60):
+    validAppointments.append(datetime.timedelta(seconds = seconds))
+    seconds += 600 
 
-for i in bookedAppts:
-    print(i[0][1].time())
+for i in range(len(bookedAppts)):
+    temp = bookedAppts[i][0]
+    for j in validAppointments:
+        if j == temp: 
+            validAppointments.remove(j)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

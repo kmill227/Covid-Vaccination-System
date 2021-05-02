@@ -9,6 +9,7 @@ class User:
         self.id = 0
         self.flag = 2
         self.isAdmin = 0
+        self.name = ""
     
 
 

@@ -1,6 +1,5 @@
 from Alerts import Alerts
 from DataBaseConnection import DataBase
-import VaccineOrder
 class Campus:
     def __init__(self, name):
         self.name = name
@@ -15,14 +14,17 @@ class Campus:
         self.vaccinesGiven = campusData[0][3]
         self.revenue = campusData[0][4]
         self.currentBrand = campusData[0][5]
-        self.order = VaccineOrder.VaccineOrder()
+        self.orderDate = campusData[0][6]
+        self.orderBrand
+        
 
 
     def lowVaccines(self):
         if self.vaccineCount == 0: 
-            self.alerts.sendEmail()
+            return 1
         if (self.vaccineCount < 50 and self.isRegional == 1) or (self.vaccineCount < 150 and self.isRegional == 0):
             self.orderVaccines()
+        return 0
         
         
     def orderVaccines(self):

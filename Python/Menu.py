@@ -7,7 +7,7 @@ import Admin
 import Patient
 import Alerts
 import Campus
-from DatabaseConnection import DataBase 
+from DataBaseConnection import DataBase 
 
 class Menu:
     def __init__(self):
@@ -74,10 +74,12 @@ class Menu:
         button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
         button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=self.cancelAppointmentMenu)
         button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=self.rescheduleAppointmentMenu)
+        button4 = tk.Button(self.root, text = "View my appointments", width = 50, command=self.viewAppointmentsMenu)
 
         button1.pack()
         button2.pack()
         button3.pack()
+        button4.pack()
 
         self.root.mainloop()
 
@@ -107,13 +109,17 @@ class Menu:
         self.root.geometry('600x600')
 
         dates = tkc.Calendar(self.root, selectmode="day", year=2021, month=5, day=1)
-        goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy(), self.timeSelectMenu(campus, dates.selection_get())])
-        backButton = tk.Button(self.root, text = "Back", width = 20, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
-        dates.pack(fill = "both", expand = "true")
 
+        if self.currentUser.isAdmin == 1:
+            goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy()])
+            backButton = tk.Button(self.root, text = "Back", width = 20, command =lambda:[self.root.destroy()])
+        else:
+            goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy(), self.timeSelectMenu(campus, dates.selection_get())])
+            backButton = tk.Button(self.root, text = "Back", width = 20, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
+
+        dates.pack(fill = "both", expand = "true")
         backButton.pack(side = tk.LEFT, pady = 15, padx = 20)      
         goButton.pack(side = tk.RIGHT, pady = 15, padx = 20)
-
 
         self.root.mainloop()
 
@@ -128,28 +134,63 @@ class Menu:
             accept.pack()
             self.root.mainloop()
 
-        db = Database()
+        db = DataBase()
         sql = "SELECT AppointmentTime FROM appointment WHERE AppointmentDate=%s AND Campus =%s"
         args = (date, campus)
         db.cursor.execute(sql, args)
         bookedAppts = db.cursor.fetchall()
 
-        validAppointments = []
-        hours = 8
-        minutes = 0
-        seconds = 0
+        campusData = Campus.Campus(campus)
+        if campusData.lowVaccines() and date < campusData.orderDate:
+            self.root = tk.Tk()
+            self.root.geometry('200x100')
+            
+            label = tk.Label(self.root, text="Selected Campus has no Vaccines available")
 
-        for i in range(10):
-            hours += 1
-            minutes = 0
-        for i in range(6):
-            validAppointments.append(datetime.time(hours, minutes, seconds))
-            minutes += 10
+
+        validAppointments = []
+        k = 0
+        seconds = 28800
+
+        for i in range(60):
+            validAppointments.append(datetime.timedelta(seconds = seconds))
+            seconds += 600 
+
+        for i in range(len(bookedAppts)):
+            temp = bookedAppts[i][0]
+            for j in validAppointments:
+                if j == temp: 
+                    validAppointments.remove(j)
+            
 
         self.root = tk.Tk()
-        self.root.geometry('600x600')
+        self.root.geometry('400x150')
         self.root.title('Time Selection')
+        selection = tk.StringVar()
+        selection.set(validAppointments[0])
+        label = tk.Label(self.root, text="Select an available time from the Dropdown", width = 50)
+        goButton = tk.Button(self.root, text = "GO", command=lambda:[self.root.destroy(), self.nameAndInsuranceMenu(campus, date, selection.get())])
+        backButton = tk.Button(self.root, text="Back", command=lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
+        Dropdown = tk.OptionMenu(self.root, selection, *validAppointments)
+        label.pack()
+        Dropdown.pack()
+        goButton.pack()
+        backButton.pack()
 
+        self.root.mainloop()
+
+    def nameAndInsuranceMenu(self, campus, date, time): 
+        self.root = tk.Tk()
+        self.root.geometry('300x150')
+        
+        nameLabel = tk.Label(self.root, text="Name").grid(row = 0, column = 0)
+        self.currentUser.name = tk.StringVar()
+        nameEntry = tk.Entry(self.root, textvariable = self.currentUser.name).grid(row=0, column = 1)
+
+
+
+
+############ CURRENTLY WORKING ON NAME AND INSURANCE MENU 
 
 
         

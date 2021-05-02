@@ -15,7 +15,6 @@ class Patient(User.User):
         self.appointments.append(Appointment.Appointment())
         self.appointments.append(Appointment.Appointment())
         self.dosesCompleted = 0
-        self.name = ""
 
   
 
