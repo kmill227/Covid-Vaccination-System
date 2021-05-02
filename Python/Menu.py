@@ -1,5 +1,7 @@
 import tkinter as tk
 from functools import partial
+import tkcalendar as tkc
+import datetime
 import User
 import Admin
 import Patient
@@ -11,11 +13,11 @@ class Menu:
         self.currentUser = User.User()
         self.campusNames = ["East Liverpool", "Geauga", "Kent", "Salem", "Stark", "Trumbull", "Tuscarawas"]
         self.campusList = []
-        for i in campusNames:
-            campusList.append(campusNames[i])
+        for i in range(7):
+            self.campusList.append(self.campusNames[i])
 
 
-    def LogInScreen(self):
+    def logInMenu(self):
         self.root = tk.Tk()
         self.root.geometry('300x150')
         self.root.title('CVIS Log-In')
@@ -45,48 +47,94 @@ class Menu:
             self.root = tk.Tk()
             self.root.geometry('200x100')
             label = tk.Label(self.root, text="Invalid Login")
-            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.LogInScreen()])
+            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.logInMenu()])
             label.pack()
             accept.pack()
             self.root.mainloop()
 
     def adminMenu(self):
         self.root = tk.Tk()
+        self.root.title("Administrator Menu")
         self.root.geometry('400x100')
+
         button1 = tk.Button(self.root, text = "Register a new User", width = 50, command=self.currentUser.registerUser)
         button2 = tk.Button(self.root, text = "Display Booked Appointments", width = 50, command=self.currentUser.displayAllAppointments)
         button3 = tk.Button(self.root, text = "Log a Given Vaccine", width = 50, command=self.currentUser.logVaccine)
+
         button1.pack()
         button2.pack()
         button3.pack()
+
         self.root.mainloop()
 
     def patientMenu(self): 
         self.root = tk.Tk()
         self.root.geometry('400x100')
-        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=self.campusSelectMenu)
+        self.root.title("User Menu")
+
+        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
         button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=self.cancelAppointmentMenu)
         button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=self.rescheduleAppointmentMenu)
+
         button1.pack()
         button2.pack()
         button3.pack()
+
         self.root.mainloop()
 
     def campusSelectMenu(self):
         self.root = tk.Tk()
-        self.root.geometry('400x100')
+        self.root.title("Select Campus")
+        self.root.geometry('400x150')
+
         label = tk.Label(self.root, text="Select a Campus from the Dropdown Menu", width = 50)
         selection = tk.StringVar()
         selection.set(self.campusNames[0])
         Dropdown = tk.OptionMenu(self.root, selection, *self.campusNames)
-        button = tk.Button(self.root, text="GO", width = 10)
+        goButton = tk.Button(self.root, text="GO", width = 10, command=lambda:[self.root.destroy(),self.dateSelectMenu(selection.get())])
+        backButton = tk.Button(self.root, text="Back", width = 10, command=lambda:[self.root.destroy(), self.patientMenu()])
+
         label.pack()
         Dropdown.pack()
-        button.pack()
+        goButton.pack()
+        backButton.pack()
+
         self.root.mainloop()
 
-    def dateSelectMenu(self):
-        pass
+    def dateSelectMenu(self, campus):
+
+        self.root = tk.Tk()
+        self.root.title('Appointment Date Selection')
+        self.root.geometry('600x600')
+
+        dates = tkc.Calendar(self.root, selectmode="day", year=2021, month=5, day=1)
+        goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy(), self.timeSelectMenu(campus, dates.selection_get())])
+        backButton = tk.Button(self.root, text = "Back", width = 20, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
+        dates.pack(fill = "both", expand = "true")
+
+        backButton.pack(side = tk.LEFT, pady = 15, padx = 20)      
+        goButton.pack(side = tk.RIGHT, pady = 15, padx = 20)
+
+
+        self.root.mainloop()
+
+
+    def timeSelectMenu(self, campus, date):
+        if date.weekday() > 4:
+            self.root = tk.Tk()
+            self.root.geometry('200x100')
+            label = tk.Label(self.root, text="Pick a day Monday through Friday")
+            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
+            label.pack()
+            accept.pack()
+            self.root.mainloop()
+        for i in self.campusList:
+            if campus == i.name:
+                campusData = i
+                print(campusData.name)
+
+
+
 
     def cancelAppointmentMenu(self): 
         pass
@@ -96,4 +144,4 @@ class Menu:
 
     
 menu = Menu()
-menu.campusSelectMenu()
+menu.patientMenu()

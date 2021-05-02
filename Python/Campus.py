@@ -1,5 +1,6 @@
 from Alerts import Alerts
 from DataBaseConnection import DataBase
+import VaccineOrder
 class Campus:
     def __init__(self, name):
         self.name = name
@@ -14,6 +15,7 @@ class Campus:
         self.vaccinesGiven = campusData[0][3]
         self.revenue = campusData[0][4]
         self.currentBrand = campusData[0][5]
+        self.order = VaccineOrder()
 
 
     def lowVaccines(self):
