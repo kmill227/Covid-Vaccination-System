@@ -186,11 +186,13 @@ class Menu:
         nameLabel = tk.Label(self.root, text="Name").grid(row = 0, column = 0)
         self.currentUser.name = tk.StringVar()
         nameEntry = tk.Entry(self.root, textvariable = self.currentUser.name).grid(row=0, column = 1)
+        
+
+    def viewAppointmentsMenu(self):
+        pass
 
 
 
-
-############ CURRENTLY WORKING ON NAME AND INSURANCE MENU 
 
 
         

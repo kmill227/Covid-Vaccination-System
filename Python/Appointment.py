@@ -8,6 +8,7 @@ class Appointment:
         self.campus = 0
         self.id = 0
         self.vaccine = Vaccine.Vaccine()
+        self.complete = 0
 
     def createAppointment(self, date, time, campus):
         #logs appointment to database

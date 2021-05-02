@@ -15,7 +15,7 @@ class Campus:
         self.revenue = campusData[0][4]
         self.currentBrand = campusData[0][5]
         self.orderDate = campusData[0][6]
-        self.orderBrand
+        self.orderBrand = ""
         
 
 

@@ -4,4 +4,4 @@ class Insurance:
         self.policyNum = 0
 
     def hasInsurance(self):
-        pass
+        return policyNum
