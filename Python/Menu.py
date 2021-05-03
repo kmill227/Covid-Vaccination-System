@@ -7,209 +7,199 @@ import Admin
 import Patient
 import Alerts
 import Campus
+import Appointment
 from DataBaseConnection import DataBase 
 
-class Menu:
-    def __init__(self):
-        self.currentUser = User.User()
-        self.campusNames = ["East Liverpool", "Geauga", "Kent", "Salem", "Stark", "Trumbull", "Tuscarawas"]
 
 
+class LogInMenu:
+    def __init__(self, user):
+        self.currentUser = user
+        self.email = ""
+        self.password = ""
+        self.successFlag = 0
 
-    def logInMenu(self):
+    def mainWindow(self):
         self.root = tk.Tk()
         self.root.geometry('300x150')
         self.root.title('CVIS Log-In')
 
         emailLabel = tk.Label(self.root, text="Email").grid(row=0, column=0)
-        self.currentUser.email = tk.StringVar()
-        emailEntry = tk.Entry(self.root, textvariable=self.currentUser.email).grid(row=0, column=1)
+        self.email = tk.StringVar()
+        emailEntry = tk.Entry(self.root, textvariable=self.email).grid(row=0, column=1)
 
         passwordLabel = tk.Label(self.root, text="Password").grid(row=1, column=0)
-        self.currentUser.password = tk.StringVar()
-        passwordEntry = tk.Entry(self.root, textvariable=self.currentUser.password, show='*').grid(row=1, column=1)
+        self.password = tk.StringVar()
+        passwordEntry = tk.Entry(self.root, textvariable=self.password, show='*').grid(row=1, column=1)
 
-        logIn = partial(self.currentUser.checkLogIn, self.root)
-
-        loginButton = tk.Button(self.root, text="Login", command=logIn).grid(row=4, column=1)
+        loginButton = tk.Button(self.root, text="Login", command=lambda:[self.root.destroy(), self.currentUser.checkLogIn(self.email.get(), self.password.get()), self.checkFlag()]).grid(row=4, column=1)
 
         self.root.mainloop() 
 
-        if self.currentUser.flag == 1:
-            if self.currentUser.isAdmin == 1: 
-                self.currentUser = Admin.Admin()
-                adminMenu()
-            else: 
-                self.currentUser = Patient.Patient()
-                self.patientMenu()
-        elif self.currentUser.flag == 0: 
-            self.root = tk.Tk()
-            self.root.geometry('200x100')
-            label = tk.Label(self.root, text="Invalid Login")
-            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.logInMenu()])
-            label.pack()
-            accept.pack()
-            self.root.mainloop()
-
-    def adminMenu(self):
+    def logInErrorWindow(self):
         self.root = tk.Tk()
-        self.root.title("Administrator Menu")
-        self.root.geometry('400x100')
-
-        button1 = tk.Button(self.root, text = "Register a new User", width = 50, command=self.currentUser.registerUser)
-        button2 = tk.Button(self.root, text = "Display Booked Appointments", width = 50, command=self.currentUser.displayAllAppointments)
-        button3 = tk.Button(self.root, text = "Log a Given Vaccine", width = 50, command=self.currentUser.logVaccine)
-
-        button1.pack()
-        button2.pack()
-        button3.pack()
-
+        self.root.geometry('200x100')
+        label = tk.Label(self.root, text="Invalid Login")
+        accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.mainWindow()])
+        label.pack()
+        accept.pack()
         self.root.mainloop()
 
-    def patientMenu(self): 
+    def checkFlag(self):
+        if self.currentUser.flag == 1: 
+            self.successFlag = 1
+        else:
+            self.logInErrorWindow()
+
+
+class PatientMenu:
+    def __init__(self, patient):
+        self.currentPatient = patient
+        self.next = AppointmentMenu(self.currentPatient)
+
+    def mainWindow(self):
         self.root = tk.Tk()
         self.root.geometry('400x100')
         self.root.title("User Menu")
 
-        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
-        button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=self.cancelAppointmentMenu)
-        button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=self.rescheduleAppointmentMenu)
-        button4 = tk.Button(self.root, text = "View my appointments", width = 50, command=self.viewAppointmentsMenu)
+        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.next.tooManySmurfsWindow()])
+        #button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=self.cancelAppointmentMenu)
+        #button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=self.rescheduleAppointmentMenu)
+        #button4 = tk.Button(self.root, text = "View my appointments", width = 50, command=self.viewAppointmentsMenu)
 
         button1.pack()
-        button2.pack()
-        button3.pack()
-        button4.pack()
+        #button2.pack()
+        #button3.pack()
+        #button4.pack()
 
         self.root.mainloop()
 
-    def campusSelectMenu(self):
+class AppointmentMenu:
+
+    def __init__(self, patient):
+        self.currentPatient = patient
+        self.tempAppt = Appointment.Appointment()
+        self.selection = ""
+
+    def tooManySmurfsWindow(self):
+        if self.currentPatient.isEligible() == False:
+            self.root = tk.Tk()
+            self.root.geometry('400x100')
+            label = tk.Label(self.root, text="Current User has too many scheduled appointments")
+            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy()])
+            label.pack()
+            accept.pack()
+            self.root.mainloop()
+        else: 
+            self.NameAndInsurance()
+
+    def NameAndInsurance(self):
+        self.root = tk.Tk()
+        self.root.geometry('300x150')
+        
+        insurance = tk.IntVar()
+        nameLabel = tk.Label(self.root, text="Name").grid(row = 0, column = 0)
+        self.selection = tk.StringVar()
+
+        nameEntry = tk.Entry(self.root, textvariable = self.selection).grid(row=0, column = 1)
+        insuranceLabel = tk.Label(self.root, text="Do you have insurance?").grid(row=2, column=1)
+        yesButton = tk.Radiobutton(self.root, text="Yes", variable = insurance, value=1).grid(row=3, column=1)
+        noButton = tk.Radiobutton(self.root, text="No", variable = insurance, value = 0).grid(row=4, column=1)
+        goButton = tk.Button(self.root, text="GO", command=lambda:[self.root.destroy(), self.currentPatient.setName(self.selection.get()), self.currentPatient.setInsurance(insurance.get()),self.tempAppt.setUserID(self.currentPatient.getID()), self.campusSelect()]).grid(row = 5, column = 1)
+        
+        self.root.mainloop()
+
+    def campusSelect(self):
+        campusNames = ["East Liverpool", "Geauga", "Kent", "Salem", "Stark", "Trumbull", "Tuscarawas"]
         self.root = tk.Tk()
         self.root.title("Select Campus")
         self.root.geometry('400x150')
 
         label = tk.Label(self.root, text="Select a Campus from the Dropdown Menu", width = 50)
-        selection = tk.StringVar()
-        selection.set(self.campusNames[0])
-        Dropdown = tk.OptionMenu(self.root, selection, *self.campusNames)
-        goButton = tk.Button(self.root, text="GO", width = 10, command=lambda:[self.root.destroy(),self.dateSelectMenu(selection.get())])
-        backButton = tk.Button(self.root, text="Back", width = 10, command=lambda:[self.root.destroy(), self.patientMenu()])
+        self.selection = tk.StringVar()
+        self.selection.set(campusNames[0])
+        Dropdown = tk.OptionMenu(self.root, selection, *campusNames)
+        goButton = tk.Button(self.root, text="GO", width = 10, command=lambda:[self.root.destroy(),self.tempAppt.setCampus(self.selection.get()), self.dateSelect(self.selection.get()), self.tempAppt.vaccine.setCurrentBrand(self.tempAppt.campus.getCurrentBrand())])
 
         label.pack()
         Dropdown.pack()
         goButton.pack()
-        backButton.pack()
 
         self.root.mainloop()
-
-    def dateSelectMenu(self, campus):
-        
+    
+    def dateSelect(self, campus):
+    
         self.root = tk.Tk()
         self.root.title('Appointment Date Selection')
         self.root.geometry('600x600')
 
         dates = tkc.Calendar(self.root, selectmode="day", year=2021, month=5, day=1)
 
-        if self.currentUser.isAdmin == 1:
-            goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy()])
-            backButton = tk.Button(self.root, text = "Back", width = 20, command =lambda:[self.root.destroy()])
-        else:
-            goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy(), self.timeSelectMenu(campus, dates.selection_get())])
-            backButton = tk.Button(self.root, text = "Back", width = 20, command=lambda:[self.root.destroy(), self.campusSelectMenu()])
+        goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy(), self.dateErrorWindow(campus, dates.selection_get())])
+        backButton = tk.Button(self.root, text = "Back", width = 20, command=lambda:[self.root.destroy(), self.campusSelect()])
 
         dates.pack(fill = "both", expand = "true")
         backButton.pack(side = tk.LEFT, pady = 15, padx = 20)      
         goButton.pack(side = tk.RIGHT, pady = 15, padx = 20)
 
         self.root.mainloop()
+    
+    def dateErrorWindow(self, campus, date):
 
-
-    def timeSelectMenu(self, campus, date):
-        if date.weekday() > 4:
+        if self.tempAppt.validDate(date) == False:
             self.root = tk.Tk()
             self.root.geometry('200x100')
             label = tk.Label(self.root, text="Pick a day between Monday & Friday")
-            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
+            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelectMenu(self.tempAppt.campus.name)])
             label.pack()
             accept.pack()
             self.root.mainloop()
+        else:
+            self.tempAppt.setDate(date)
+            self.timeSelect(campus, date)
 
-        db = DataBase()
-        sql = "SELECT AppointmentTime FROM appointment WHERE AppointmentDate=%s AND Campus =%s"
-        args = (date, campus)
-        db.cursor.execute(sql, args)
-        bookedAppts = db.cursor.fetchall()
-
-        campusData = Campus.Campus(campus)
-        if campusData.lowVaccines() and date < campusData.orderDate:
-            self.root = tk.Tk()
-            self.root.geometry('200x100')
-            
-            label = tk.Label(self.root, text="Selected Campus has no Vaccines available")
-
-
-        validAppointments = []
-        k = 0
-        seconds = 28800
-
-        for i in range(60):
-            validAppointments.append(datetime.timedelta(seconds = seconds))
-            seconds += 600 
-
-        for i in range(len(bookedAppts)):
-            temp = bookedAppts[i][0]
-            for j in validAppointments:
-                if j == temp: 
-                    validAppointments.remove(j)
-            
-
+    def timeSelect(self, campus, date):
+        availableTimes = self.tempAppt.getAvailableTimes()
         self.root = tk.Tk()
         self.root.geometry('400x150')
         self.root.title('Time Selection')
-        selection = tk.StringVar()
-        selection.set(validAppointments[0])
+        self.selection = tk.StringVar()
+        self.selection.set(availableTimes[0])
         label = tk.Label(self.root, text="Select an available time from the Dropdown", width = 50)
-        goButton = tk.Button(self.root, text = "GO", command=lambda:[self.root.destroy(), self.nameAndInsuranceMenu(campus, date, selection.get())])
+        goButton = tk.Button(self.root, text = "GO", command=lambda:[self.root.destroy(), self.tempAppt.setTime(self.selection.get()), self.confirmationWindow()])
         backButton = tk.Button(self.root, text="Back", command=lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
-        Dropdown = tk.OptionMenu(self.root, selection, *validAppointments)
+        Dropdown = tk.OptionMenu(self.root, selection, *availableTimes)
         label.pack()
         Dropdown.pack()
         goButton.pack()
         backButton.pack()
 
-        self.root.mainloop()
-
-    def nameAndInsuranceMenu(self, campus, date, time): 
+    def confirmationWindow(self):
         self.root = tk.Tk()
-        self.root.geometry('300x150')
-        
-        nameLabel = tk.Label(self.root, text="Name").grid(row = 0, column = 0)
-        self.currentUser.name = tk.StringVar()
-        nameEntry = tk.Entry(self.root, textvariable = self.currentUser.name).grid(row=0, column = 1)
-        
+        self.geometry('200x150')
+        label = tk.Label(self.root, text="Appointment Created", width = 50)
+        accept = tk.Button(self.root, text= "OK", command=lambda:[self.root.destroy(), self.update()])
 
-    def viewAppointmentsMenu(self):
-        pass
-
-
-
-
-
+    def update(self):
+        self.currentPatient.appointments.append(self.tempAppt)
+        self.tempAppt.createAppointment()
+        self.tempAppt.campus.bookVaccine()
+        self.tempAppt.campus.updateVaccineInfo()
+        self.currentPatient.updateDataBase()
         
 
-
-                
         
 
 
 
 
-    def cancelAppointmentMenu(self): 
-        pass
 
-    def rescheduleAppointmentMenu(self):
-        pass
+
+
+
+
+
 
     
-menu = Menu()
-menu.logInMenu()
+    
+

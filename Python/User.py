@@ -10,16 +10,17 @@ class User:
         self.flag = 2
         self.isAdmin = 0
         self.name = ""
-    
 
 
-    def checkLogIn(self, window):
-        self.email = self.email.get()
-        self.password = self.password.get()
+
+    def checkLogIn(self, email, password):
+        self.email = email
+        self.password = password
         db = DataBase()
         sql = "SELECT Email FROM logins"
         db.cursor.execute(sql)
         validEmails = db.cursor.fetchall() 
+        db.connection.close()
         found = False
         for i in validEmails:
             if i[0] == self.email:
@@ -31,15 +32,22 @@ class User:
             validPass = db.cursor.fetchone()
             if self.password != validPass[0]:
                 self.flag = 0
-                window.destroy()
             else: 
                 self.id = validPass[1]
                 self.isAdmin = validPass[2]
                 self.flag = 1
-                window.destroy()
         else: 
             self.flag = 0
-            window.destroy()
+
+    def setName(self, name):
+        self.name = name
+
+    def updateDataBase(self):
+        pass
+
+    def getID(self):
+        return self.id
+
 
 
 

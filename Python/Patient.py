@@ -1,7 +1,7 @@
 import User
-import Insurance
 import Appointment
 import Vaccine
+import Insurance
 from DataBaseConnection import DataBase
 import datetime
 
@@ -9,11 +9,10 @@ class Patient(User.User):
     
     def __init__(self):
         super().__init__() 
-        self.ins = Insurance.Insurance()
         self.vaccine = Vaccine.Vaccine()
         self.appointments = []
-        self.dosesCompleted = 0
-
+        self.insurance = Insurance.Insurance()
+        
   
     def loadAppointments(self):
         #loads Appointments from database for given user 
@@ -30,13 +29,28 @@ class Patient(User.User):
             self.appointments[i].time = apptList[i][4]
             self.appointments[i].vaccine.brand = apptList[i][5]
             self.appointments[i].complete = apptList[i][6]
+        db.connection.close()
 
-patient = Patient()
-patient.id = 1000
-patient.loadAppointments()
-for i in patient.appointments:
-    print(i.id, ' ', i.campus, ' ', i.date, ' ', i.time, ' ', i.vaccine.brand, ' ', i.complete)
+    def numberOfAppointments(self):
+        self.loadAppointments()
+        return len(self.appointments)
 
-
-
+    def isEligible(self):
+        if self.numberOfAppointments() == 1 and self.appointments[0].vaccine.brand == "Johnson&Johnson":
+            return False
+        elif (self.numberOfAppointments() == 2) and (self.appointments[0].vaccine.brand == "Pfizer" or self.appointments[0].vaccine.brand == "Moderna"):
+            return False
+        else:
+            return True
     
+    def setInsurance(self, value):
+        self.insurance.policyNum = value
+
+    def insertAppointment(self, appointment):
+        self.appointments.append(appointment)
+
+    def logData(self):
+        db = DataBase()
+        
+
+

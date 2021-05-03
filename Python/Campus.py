@@ -15,7 +15,8 @@ class Campus:
         self.revenue = campusData[0][4]
         self.currentBrand = campusData[0][5]
         self.orderDate = campusData[0][6]
-        self.orderBrand = ""
+        db.connection.close()
+
         
 
 
@@ -26,6 +27,33 @@ class Campus:
             self.orderVaccines()
         return 0
         
-        
     def orderVaccines(self):
         pass
+
+    def computeRevenue(self):
+        pass
+
+    def getCurrentBrand(self):
+        return self.currentBrand()
+
+    def bookVaccine(self):
+        if self.currentBrand == "Johnson&Johnson":
+            self.vaccineCount -= 1
+            self.vaccinesGiven += 1
+        else: 
+            self.vaccineCount -= 2
+            self.vaccinesGiven += 2
+
+    def updateVaccineInfo(self):
+        db = DataBase()
+        sql = "UPDATE campus SET VaccinesOnHand = %s, VaccinesGiven = %s WHERE CampusName = %s"
+        args = (self.vaccineCount, self.vaccinesGiven, self.name)
+        db.cursor.execute(sql, args)
+        db.connection.commit()
+        db.connection.close()
+
+
+
+
+
+    
