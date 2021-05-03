@@ -49,8 +49,34 @@ class Patient(User.User):
     def insertAppointment(self, appointment):
         self.appointments.append(appointment)
 
-    def logData(self):
+    def isInDataBase(self):
         db = DataBase()
+        sql = "SELECT ID FROM users"
+        db.cursor.execute(sql)
+        validIds = db.cursor.fetchall()
+        db.connection.close()
+        for i in validIds:
+            if self.id == i[0]:
+                return True
+        return False
+
+    def logData(self):
+        if self.isInDataBase():
+            db = DataBase()
+            sql = "UPDATE users SET Name = %s, Vaccinations = %s, Insurance = %s WHERE ID = %s"
+            args = (self.name, len(self.appointments), self.insurance.hasInsurance(), self.id)  
+            db.cursor.execute(sql, args)
+            db.connection.commit()
+            db.connection.close()
+        else:
+            db = DataBase()
+            sql = "INSERT INTO USERS (ID, Name, Vaccinations, Insurance) VALUES (%s, %s, %s, %s)"
+            args = (self.id, self.name, len(self.appointments), self.insurance.hasInsurance())
+            db.cursor.execute(sql, args)
+            db.connection.commit()
+            db.connection.close()
+
+
         
 
 

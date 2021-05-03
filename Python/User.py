@@ -20,7 +20,6 @@ class User:
         sql = "SELECT Email FROM logins"
         db.cursor.execute(sql)
         validEmails = db.cursor.fetchall() 
-        db.connection.close()
         found = False
         for i in validEmails:
             if i[0] == self.email:
@@ -38,12 +37,10 @@ class User:
                 self.flag = 1
         else: 
             self.flag = 0
+        db.connection.close()
 
     def setName(self, name):
         self.name = name
-
-    def updateDataBase(self):
-        pass
 
     def getID(self):
         return self.id

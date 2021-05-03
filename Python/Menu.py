@@ -55,20 +55,21 @@ class LogInMenu:
 class PatientMenu:
     def __init__(self, patient):
         self.currentPatient = patient
-        self.next = AppointmentMenu(self.currentPatient)
+        self.createAppointmentMenu = AppointmentMenu(self.currentPatient)
+        self.cancelAppointmentMenu = ViewApptsMenu(self.currentPatient)
 
     def mainWindow(self):
         self.root = tk.Tk()
         self.root.geometry('400x100')
         self.root.title("User Menu")
 
-        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.next.tooManySmurfsWindow()])
-        #button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=self.cancelAppointmentMenu)
+        button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.createAppointmentMenu.tooManySmurfsWindow()])
+        button2 = tk.Button(self.root, text = "Cancel an Appointment", width = 50, command=lambda:[self.root.destroy(), self.cancelAppointmentMenu.notEnoughSmurfsWindow()])
         #button3 = tk.Button(self.root, text = "Reschedule an Appointment", width = 50, command=self.rescheduleAppointmentMenu)
         #button4 = tk.Button(self.root, text = "View my appointments", width = 50, command=self.viewAppointmentsMenu)
 
         button1.pack()
-        #button2.pack()
+        button2.pack()
         #button3.pack()
         #button4.pack()
 
@@ -118,8 +119,8 @@ class AppointmentMenu:
         label = tk.Label(self.root, text="Select a Campus from the Dropdown Menu", width = 50)
         self.selection = tk.StringVar()
         self.selection.set(campusNames[0])
-        Dropdown = tk.OptionMenu(self.root, selection, *campusNames)
-        goButton = tk.Button(self.root, text="GO", width = 10, command=lambda:[self.root.destroy(),self.tempAppt.setCampus(self.selection.get()), self.dateSelect(self.selection.get()), self.tempAppt.vaccine.setCurrentBrand(self.tempAppt.campus.getCurrentBrand())])
+        Dropdown = tk.OptionMenu(self.root, self.selection, *campusNames)
+        goButton = tk.Button(self.root, text="GO", width = 10, command=lambda:[self.root.destroy(),self.tempAppt.setCampus(self.selection.get()), self.dateSelect(self.selection.get())])
 
         label.pack()
         Dropdown.pack()
@@ -128,12 +129,14 @@ class AppointmentMenu:
         self.root.mainloop()
     
     def dateSelect(self, campus):
-    
+        currentDay = datetime.datetime.now().day
+        currentMonth = datetime.datetime.now().month
+        currentYear = datetime.datetime.now().year
         self.root = tk.Tk()
         self.root.title('Appointment Date Selection')
         self.root.geometry('600x600')
 
-        dates = tkc.Calendar(self.root, selectmode="day", year=2021, month=5, day=1)
+        dates = tkc.Calendar(self.root, selectmode="day", year=currentYear, month=currentMonth, day=currentDay)
 
         goButton = tk.Button(self.root, text = "GO", width = 20, command=lambda:[self.root.destroy(), self.dateErrorWindow(campus, dates.selection_get())])
         backButton = tk.Button(self.root, text = "Back", width = 20, command=lambda:[self.root.destroy(), self.campusSelect()])
@@ -149,7 +152,7 @@ class AppointmentMenu:
         if self.tempAppt.validDate(date) == False:
             self.root = tk.Tk()
             self.root.geometry('200x100')
-            label = tk.Label(self.root, text="Pick a day between Monday & Friday")
+            label = tk.Label(self.root, text="Pick a day between Monday & Friday and No more than 2 weeks in advance")
             accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelectMenu(self.tempAppt.campus.name)])
             label.pack()
             accept.pack()
@@ -168,7 +171,7 @@ class AppointmentMenu:
         label = tk.Label(self.root, text="Select an available time from the Dropdown", width = 50)
         goButton = tk.Button(self.root, text = "GO", command=lambda:[self.root.destroy(), self.tempAppt.setTime(self.selection.get()), self.confirmationWindow()])
         backButton = tk.Button(self.root, text="Back", command=lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
-        Dropdown = tk.OptionMenu(self.root, selection, *availableTimes)
+        Dropdown = tk.OptionMenu(self.root, self.selection, *availableTimes)
         label.pack()
         Dropdown.pack()
         goButton.pack()
@@ -176,18 +179,51 @@ class AppointmentMenu:
 
     def confirmationWindow(self):
         self.root = tk.Tk()
-        self.geometry('200x150')
+        self.root.geometry('200x100')
         label = tk.Label(self.root, text="Appointment Created", width = 50)
         accept = tk.Button(self.root, text= "OK", command=lambda:[self.root.destroy(), self.update()])
+        label.pack()
+        accept.pack()
+
 
     def update(self):
-        self.currentPatient.appointments.append(self.tempAppt)
+        self.currentPatient.insertAppointment(self.tempAppt)
+        self.tempAppt.vaccine.setCurrentBrand(self.tempAppt.campus.currentBrand)
         self.tempAppt.createAppointment()
         self.tempAppt.campus.bookVaccine()
+        
+        if self.tempAppt.followUpSchedule() == True:
+            self.currentPatient.insertAppointment(self.tempAppt)
+            
         self.tempAppt.campus.updateVaccineInfo()
-        self.currentPatient.updateDataBase()
+        self.currentPatient.logData()
+
         
 
+class ViewApptsMenu:
+    def __init__(self, patient):
+        self.currentPatient = patient
+        self.selection = ""
+
+    def notEnoughSmurfsWindow(self):
+        if self.currentPatient.numberofAppointments() == 0:
+            self.root = tk.Tk()
+            self.root.geometry('400x100')
+            label = tk.Label(self.root, text="Current User has no scheduled appointments")
+            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy()])
+            label.pack()
+            accept.pack()
+            self.root.mainloop()
+        else: 
+            self.viewAppointmentsWindow()
+
+    def viewAppointmentsWindow(self):
+        self.root = tk.Tk()
+        self.root.title("Select Appointment")
+        self.root.geometry('400x150')
+
+
+        
         
 
 
