@@ -8,6 +8,7 @@ class Alerts:
         self.addresses = []
 
     def sendEmail(self, campusName):
+        # sends an email to every registered user in database
         port = 465
         password = "M4eyPrhKt3aRqQD"
         context = ssl.create_default_context()
@@ -20,6 +21,7 @@ class Alerts:
                 server.sendmail("cvisdemogroup1@gmail.com", i, message)
         
     def getAddresses(self): 
+        #get email from login table of database
         db = DataBase()
         sql = "SELECT Email FROM logins"
         db.cursor.execute(sql)

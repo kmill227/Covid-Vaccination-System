@@ -17,6 +17,7 @@ class LogInMenu:
         self.successFlag = 0
 
     def mainWindow(self):
+        # main login window
         self.root = tk.Tk()
         self.root.geometry('300x150')
         self.root.title('CVIS Log-In')
@@ -34,6 +35,7 @@ class LogInMenu:
         self.root.mainloop() 
 
     def logInErrorWindow(self):
+        # display if login is invalid 
         self.root = tk.Tk()
         self.root.geometry('200x100')
         label = tk.Label(self.root, text="Invalid Login")
@@ -43,6 +45,7 @@ class LogInMenu:
         self.root.mainloop()
 
     def checkFlag(self):
+        # check if the login flag is set in the user login function then set own flag otherwise send to invalid login page
         if self.currentUser.flag == 1: 
             self.successFlag = 1
         else:
@@ -57,14 +60,15 @@ class PatientMenu:
         self.visualizationMenu = visualizationMenu()
 
     def mainWindow(self):
+        # give patient all options to use system
         self.root = tk.Tk()
         self.root.geometry('400x200')
         self.root.title("User Menu")
 
         button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.createAppointmentMenu.tooManySmurfsWindow()])
         button2 = tk.Button(self.root, text = "View Existing Appointments", width = 50, command=lambda:[self.root.destroy(), self.cancelAppointmentMenu.notEnoughSmurfsWindow()])
-        button3 = tk.Button(self.root, text = "Show Vaccination Data", width = 50, command = lambda:[self.root.destroy(), self.visualizationMenu.vaccinationBarGraph()])
-        button4 = tk.Button(self.root, text = "Show Campus Revenue", width = 50, command = lambda:[self.root.destroy(), self.visualizationMenu.revenueGraph()])
+        button3 = tk.Button(self.root, text = "Show Vaccination Data", width = 50, command = lambda:[self.visualizationMenu.vaccinationBarGraph()])
+        button4 = tk.Button(self.root, text = "Show Campus Revenue", width = 50, command = lambda:[self.visualizationMenu.revenueGraph()])
 
         button1.pack()
         button2.pack()
@@ -83,6 +87,7 @@ class AppointmentMenu:
         self.selection = ""
 
     def tooManySmurfsWindow(self):
+        # displays error if user has too many appointments
         if self.currentPatient.isEligible() == False:
             self.root = tk.Tk()
             self.root.geometry('400x100')
@@ -95,6 +100,7 @@ class AppointmentMenu:
             self.NameAndInsurance()
 
     def NameAndInsurance(self):
+        # gives user options to input name and a radio button for if they have insurance or not and save results to current user
         self.root = tk.Tk()
         self.root.geometry('300x150')
         
@@ -111,6 +117,7 @@ class AppointmentMenu:
         self.root.mainloop()
 
     def campusSelect(self):
+        # gives user option to select a campus from dropdown, upon confirmation save selection to temp Appointment
         campusNames = ["East Liverpool", "Geauga", "Kent", "Salem", "Stark", "Trumbull", "Tuscarawas"]
         self.root = tk.Tk()
         self.root.title("Select Campus")
@@ -129,6 +136,7 @@ class AppointmentMenu:
         self.root.mainloop()
     
     def dateSelect(self, campus):
+        #displays a calendar to allow user to pick a date, then checks if its valid
         currentDay = datetime.datetime.now().day
         currentMonth = datetime.datetime.now().month
         currentYear = datetime.datetime.now().year
@@ -148,7 +156,7 @@ class AppointmentMenu:
         self.root.mainloop()
     
     def dateErrorWindow(self, campus, date):
-
+        #check if date chosen is valid, if no display error window, if yes, save date in temp appt and display time menu
         if self.tempAppt.validDate(date) == False:
             self.root = tk.Tk()
             self.root.geometry('400x100')
@@ -162,6 +170,7 @@ class AppointmentMenu:
             self.timeSelect(campus, date)
 
     def timeSelect(self, campus, date):
+        # give user a dropdown of available times for selected date
         availableTimes = self.tempAppt.getAvailableTimes()
         self.root = tk.Tk()
         self.root.geometry('400x150')
@@ -178,6 +187,7 @@ class AppointmentMenu:
         backButton.pack()
 
     def confirmationWindow(self):
+        #final confirmation to create appointment
         self.root = tk.Tk()
         self.root.geometry('200x100')
         label = tk.Label(self.root, text="Appointment Created", width = 50)
@@ -187,6 +197,7 @@ class AppointmentMenu:
 
 
     def update(self):
+        #logs appointment, patient, & campus data to database, increase campus vaccines given, decrease campus vaccines on hand & creates follow up appointment
         self.currentPatient.insertAppointment(self.tempAppt)
         self.tempAppt.vaccine.setCurrentBrand(self.tempAppt.campus.currentBrand)
         self.tempAppt.createAppointment()
@@ -206,6 +217,7 @@ class ViewApptsMenu:
         self.selection = ""
 
     def notEnoughSmurfsWindow(self):
+        #display if user has no appointments scheduled
         if self.currentPatient.numberOfAppointments() == 0:
             self.root = tk.Tk()
             self.root.geometry('400x100')
@@ -218,6 +230,7 @@ class ViewApptsMenu:
             self.viewAppointmentsWindow()
 
     def viewAppointmentsWindow(self):
+        # show appointments for current user and lets them select from dropdown menu, identified by an int 1 or 2 
         self.root = tk.Tk()
         self.root.title("Select Appointment")
         self.root.geometry('400x150')
@@ -240,6 +253,7 @@ class ViewApptsMenu:
         Reschedule.pack()
 
     def cancellationWindow(self, number):
+        # show cancellation confirmation window and cancels appointment upon click of button
         self.root = tk.Tk()
         self.root.geometry('200x100')
         label = tk.Label(self.root, text="Appointment Canceled", width = 50)
@@ -248,6 +262,7 @@ class ViewApptsMenu:
         accept.pack()
 
     def cancel(self, number):
+        #delete appointment and change values in database
         tempAppt = Appointment.Appointment()
         tempAppt = self.currentPatient.appointments[number]
         del self.currentPatient.appointments[number]
@@ -256,6 +271,7 @@ class ViewApptsMenu:
         tempAppt.cancelAppointment()
         
     def rescheduleWindow(self, number):
+        #cancel appointment and sends user back to original appointment scheduling window
         self.cancel(number)
         menu = AppointmentMenu(self.currentPatient)
         menu.NameAndInsurance()
@@ -272,6 +288,7 @@ class visualizationMenu:
 
 
     def vaccinationBarGraph(self):
+        # display a bar graph of students vaccinated at each campus
         studentsVaccinatedList = []
 
         for i in self.campusData:
@@ -284,8 +301,9 @@ class visualizationMenu:
         plt.show()
 
     def revenueGraph(self):
+        # display a graph of revenue from each campus
         revenueList = []
-        for i in campusData:
+        for i in self.campusData:
             i.computeRevenue()
             revenueList.append(i.revenue)
         

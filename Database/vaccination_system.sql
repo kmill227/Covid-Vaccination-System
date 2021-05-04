@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2021 at 04:51 AM
+-- Generation Time: May 04, 2021 at 05:17 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -33,16 +33,18 @@ CREATE TABLE `appointment` (
   `Campus` varchar(15) NOT NULL,
   `AppointmentDate` date NOT NULL,
   `AppointmentTime` time NOT NULL,
-  `VaccineBrand` varchar(45) NOT NULL,
-  `Complete` int(11) NOT NULL
+  `VaccineBrand` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `appointment`
 --
 
-INSERT INTO `appointment` (`AppointmentID`, `UserID`, `Campus`, `AppointmentDate`, `AppointmentTime`, `VaccineBrand`, `Complete`) VALUES
-(1000, 1000, 'Stark', '2021-05-03', '09:51:00', 'Johnson&Johnson', 0);
+INSERT INTO `appointment` (`AppointmentID`, `UserID`, `Campus`, `AppointmentDate`, `AppointmentTime`, `VaccineBrand`) VALUES
+(1031, 1000, 'Stark', '2021-05-05', '11:00:00', 'Johnson&Johnson'),
+(1032, 1001, 'Geauga', '2021-05-06', '08:00:00', 'Johnson&Johnson'),
+(1033, 1002, 'Kent', '2021-05-07', '11:00:00', 'Pfizer'),
+(1034, 1002, 'Kent', '2021-05-28', '11:00:00', 'Pfizer');
 
 -- --------------------------------------------------------
 
@@ -57,6 +59,7 @@ CREATE TABLE `campus` (
   `VaccinesGiven` int(5) NOT NULL,
   `Revenue` int(8) NOT NULL,
   `VaccineBrand` varchar(45) NOT NULL,
+  `NumberOrder` int(11) NOT NULL,
   `deliveryDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -64,14 +67,14 @@ CREATE TABLE `campus` (
 -- Dumping data for table `campus`
 --
 
-INSERT INTO `campus` (`CampusName`, `isRegional`, `VaccinesOnHand`, `VaccinesGiven`, `Revenue`, `VaccineBrand`, `deliveryDate`) VALUES
-('East Liverpool', 1, 50, 0, 0, 'Moderna', NULL),
-('Geauga', 1, 50, 0, 0, 'Johnson&Johnson', NULL),
-('Kent', 0, 150, 0, 0, 'Pfizer', NULL),
-('Salem', 1, 50, 0, 0, 'Pfizer', NULL),
-('Stark', 1, 50, 0, 0, 'Johnson&Johnson', NULL),
-('Trumbull', 1, 50, 0, 0, 'Moderna', NULL),
-('Tuscarawas', 1, 50, 0, 0, 'Pfizer', NULL);
+INSERT INTO `campus` (`CampusName`, `isRegional`, `VaccinesOnHand`, `VaccinesGiven`, `Revenue`, `VaccineBrand`, `NumberOrder`, `deliveryDate`) VALUES
+('East Liverpool', 1, 50, 0, 0, 'Moderna', 0, NULL),
+('Geauga', 1, 49, 1, 0, 'Johnson&Johnson', 0, NULL),
+('Kent', 0, 148, 1, 0, 'Pfizer', 0, NULL),
+('Salem', 1, 50, 0, 0, 'Pfizer', 0, NULL),
+('Stark', 1, 49, 1, 0, 'Johnson&Johnson', 0, NULL),
+('Trumbull', 1, 50, 0, 0, 'Moderna', 0, NULL),
+('Tuscarawas', 1, 50, 0, 0, 'Pfizer', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -94,7 +97,9 @@ INSERT INTO `logins` (`Email`, `Password`, `ID`, `IsAdmin`) VALUES
 ('kmill227@kent.edu', 'Password', 1000, 0),
 ('examplemail@kent.edu', 'Password', 1001, 0),
 ('example2@kent.edu', 'Password', 1002, 0),
-('example3@kent.edu', 'Password', 1003, 0);
+('example3@kent.edu', 'Password', 1003, 0),
+('rsilvey2@kent.edu', 'Password', 1004, 0),
+('csmit292@kent.edu', 'Password', 1005, 0);
 
 -- --------------------------------------------------------
 
@@ -105,18 +110,16 @@ INSERT INTO `logins` (`Email`, `Password`, `ID`, `IsAdmin`) VALUES
 CREATE TABLE `users` (
   `ID` int(11) NOT NULL,
   `Name` varchar(256) NOT NULL,
-  `Vaccinations` int(1) NOT NULL,
-  `Insurance` int(11) NOT NULL,
-  `Brand` varchar(45) NOT NULL,
-  `Completed` int(11) NOT NULL
+  `Insurance` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`ID`, `Name`, `Vaccinations`, `Insurance`, `Brand`, `Completed`) VALUES
-(1000, 'Kaleb Miller', 0, 0, '', 0);
+INSERT INTO `users` (`ID`, `Name`, `Insurance`) VALUES
+(1000, 'Kaleb Miller', 1),
+(1001, 'John Doe', 1);
 
 --
 -- Indexes for dumped tables
@@ -154,19 +157,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
+  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1035;
 
 --
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1004;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1006;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

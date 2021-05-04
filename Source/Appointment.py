@@ -15,6 +15,7 @@ class Appointment:
 
 
     def createAppointment(self): 
+        #log appointment in database
         db = DataBase()
         sql = "INSERT INTO appointment (UserID, Campus, AppointmentDate, AppointmentTime, VaccineBrand) VALUES (%s, %s, %s, %s, %s)"
         args = (self.userID, self.campus.name, self.date, self.time, self.vaccine.brand)
@@ -45,6 +46,7 @@ class Appointment:
         db.connection.close()
 
     def validDate(self, date):
+        # return false if weekend, more than 2 weeks away, or if before current date
         if date.weekday() > 4:
             return False
         elif self.campus.lowVaccines() and date < self.campus.orderDate:
@@ -57,12 +59,15 @@ class Appointment:
             return True
 
     def setCampus(self, name):
+        #set campus to hold data
         self.campus = Campus.Campus(name)
     
     def setDate(self, date):
+        #set vaccine date
         self.date = date
     
     def getAvailableTimes(self):
+        #retrieve available times from database, returns a list of all available times
         db = DataBase()
         sql = "SELECT AppointmentTime FROM appointment WHERE AppointmentDate=%s AND Campus =%s"
         args = (self.date, self.campus.name)
@@ -86,12 +91,15 @@ class Appointment:
         return validAppointments
 
     def setTime(self, time):
+        #set time of appointment
         self.time = time
         
     def getCampusBrand(self):
+        #sets brand of vaccine given at appointment = to brand on hand at selected campus
        self.vaccine.setBrand(self.campus.getCurrentBrand()) 
 
     def setUserID(self, value):
+        #set UserID of appointment to value
         self.userID = value
 
         

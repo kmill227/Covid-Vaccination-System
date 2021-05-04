@@ -32,10 +32,12 @@ class Patient(User.User):
         db.connection.close()
 
     def numberOfAppointments(self):
+        # get appointments from database into list then return length of list
         self.loadAppointments()
         return len(self.appointments)
 
     def isEligible(self):
+        # if brand is J&J and appointments is 1 return false, if other brand and appointment number is 2 return false as well else true 
         if self.numberOfAppointments() == 1 and self.appointments[0].vaccine.brand == "Johnson&Johnson":
             return False
         elif (self.numberOfAppointments() == 2) and (self.appointments[0].vaccine.brand == "Pfizer" or self.appointments[0].vaccine.brand == "Moderna"):

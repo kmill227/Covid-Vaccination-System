@@ -13,3 +13,6 @@ for i in campusData:
         elif i.isRegional == 1:
             i.orderVaccines(50)
     i.receiveShipment()
+
+for i in campusData:
+    i.computeRevenue()

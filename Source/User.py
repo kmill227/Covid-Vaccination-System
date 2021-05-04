@@ -14,6 +14,7 @@ class User:
 
 
     def checkLogIn(self, email, password):
+        # checks if email and password match values in database
         self.email = email
         self.password = password
         db = DataBase()
@@ -40,9 +41,11 @@ class User:
         db.connection.close()
 
     def setName(self, name):
+        #set user name to provided name
         self.name = name
 
     def getID(self):
+        # returns user id number
         return self.id
 
 
