@@ -66,7 +66,7 @@ class PatientMenu:
         self.root.title("User Menu")
 
         button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.createAppointmentMenu.tooManySmurfsWindow()])
-        button2 = tk.Button(self.root, text = "View Existing Appointments", width = 50, command=lambda:[self.root.destroy(), self.cancelAppointmentMenu.notEnoughSmurfsWindow()])
+        button2 = tk.Button(self.root, text = "Manage Existing Appointments", width = 50, command=lambda:[self.root.destroy(), self.cancelAppointmentMenu.notEnoughSmurfsWindow()])
         button3 = tk.Button(self.root, text = "Show Vaccination Data", width = 50, command = lambda:[self.visualizationMenu.vaccinationBarGraph()])
         button4 = tk.Button(self.root, text = "Show Campus Revenue", width = 50, command = lambda:[self.visualizationMenu.revenueGraph()])
 

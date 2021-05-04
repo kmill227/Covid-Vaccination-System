@@ -1,0 +1,4 @@
+Kaleb - GUI implementation, created class diagram, back-end coding, SRS file, executable release plan
+Robert - back end coding, class category diagram, SRS file, presentation slides
+Carter - back end coding, class diagram, SRS file, SQL schema, Presentation slides
+Anthony - SRS file, Presentation slides, class diagram
