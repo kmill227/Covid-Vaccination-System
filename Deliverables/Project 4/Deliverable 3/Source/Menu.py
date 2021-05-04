@@ -66,7 +66,7 @@ class PatientMenu:
         self.root.title("User Menu")
 
         button1 = tk.Button(self.root, text = "Create an appointment", width = 50, command=lambda:[self.root.destroy(), self.createAppointmentMenu.tooManySmurfsWindow()])
-        button2 = tk.Button(self.root, text = "View Existing Appointments", width = 50, command=lambda:[self.root.destroy(), self.cancelAppointmentMenu.notEnoughSmurfsWindow()])
+        button2 = tk.Button(self.root, text = "Manage Existing Appointments", width = 50, command=lambda:[self.root.destroy(), self.cancelAppointmentMenu.notEnoughSmurfsWindow()])
         button3 = tk.Button(self.root, text = "Show Vaccination Data", width = 50, command = lambda:[self.visualizationMenu.vaccinationBarGraph()])
         button4 = tk.Button(self.root, text = "Show Campus Revenue", width = 50, command = lambda:[self.visualizationMenu.revenueGraph()])
 
@@ -161,7 +161,7 @@ class AppointmentMenu:
             self.root = tk.Tk()
             self.root.geometry('400x100')
             label = tk.Label(self.root, text="Pick a day between Monday & Friday and No more than 2 weeks in advance")
-            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelect(self.tempAppt.campus.name)])
+            accept = tk.Button(self.root, text ="OK", width = 20, command = lambda:[self.root.destroy(), self.dateSelect(campus)])
             label.pack()
             accept.pack()
             self.root.mainloop()
@@ -179,7 +179,7 @@ class AppointmentMenu:
         self.selection.set(availableTimes[0])
         label = tk.Label(self.root, text="Select an available time from the Dropdown", width = 50)
         goButton = tk.Button(self.root, text = "GO", command=lambda:[self.root.destroy(), self.tempAppt.setTime(self.selection.get()), self.confirmationWindow()])
-        backButton = tk.Button(self.root, text="Back", command=lambda:[self.root.destroy(), self.dateSelectMenu(campus)])
+        backButton = tk.Button(self.root, text="Back", command=lambda:[self.root.destroy(), self.dateSelect(campus)])
         Dropdown = tk.OptionMenu(self.root, self.selection, *availableTimes)
         label.pack()
         Dropdown.pack()

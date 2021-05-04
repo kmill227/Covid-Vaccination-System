@@ -119,12 +119,13 @@ class Campus:
         # check if current date = order receiving date, log to database
         today = datetime.date.today()
         if self.orderDate == today:
+            self.vaccineCount += self.orderNumber
             self.orderPlaced = 0
             self.alerts.sendEmail(self.name)
 
         db = DataBase()
-        sql = "UPDATE campus SET OrderPlaced = %s WHERE campusName = %s"
-        args = (self.orderPlaced, self.name)
+        sql = "UPDATE campus SET OrderPlaced = %s, VaccinesOnHand = %s WHERE campusName = %s"
+        args = (self.orderPlaced, self.vaccineCount, self.name)
         db.cursor.execute(sql, args)
         db.connection.commit()
         db.connection.close()
