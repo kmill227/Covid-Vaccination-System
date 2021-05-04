@@ -72,7 +72,7 @@ class Patient(User.User):
             db.connection.close()
         else:
             db = DataBase()
-            sql = "INSERT INTO USERS (ID, Name, Insurance) VALUES (%s, %s, %s, %s)"
+            sql = "INSERT INTO USERS (ID, Name, Insurance) VALUES (%s, %s, %s)"
             args = (self.id, self.name, self.insurance.hasInsurance())
             db.cursor.execute(sql, args)
             db.connection.commit()
