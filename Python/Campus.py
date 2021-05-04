@@ -26,7 +26,7 @@ class Campus:
             return 1
         return 0
         
-    def orderVaccines(self):
+    def orderVaccines(self, numberToOrder):
         pass
 
     def computeRevenue(self):

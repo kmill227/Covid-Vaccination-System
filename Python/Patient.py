@@ -4,6 +4,7 @@ import Vaccine
 import Insurance
 from DataBaseConnection import DataBase
 import datetime
+import Campus
 
 class Patient(User.User):
     
@@ -24,11 +25,10 @@ class Patient(User.User):
         for i in range(len(apptList)):
             self.appointments.append(Appointment.Appointment())
             self.appointments[i].id = apptList[i][0]
-            self.appointments[i].campus = apptList[i][2]
+            self.appointments[i].campus = Campus.Campus(apptList[i][2])
             self.appointments[i].date = apptList[i][3]
             self.appointments[i].time = apptList[i][4]
             self.appointments[i].vaccine.brand = apptList[i][5]
-            self.appointments[i].complete = apptList[i][6]
         db.connection.close()
 
     def numberOfAppointments(self):
@@ -63,18 +63,19 @@ class Patient(User.User):
     def logData(self):
         if self.isInDataBase():
             db = DataBase()
-            sql = "UPDATE users SET Name = %s, Vaccinations = %s, Insurance = %s WHERE ID = %s"
-            args = (self.name, len(self.appointments), self.insurance.hasInsurance(), self.id)  
+            sql = "UPDATE users SET Name = %s, Insurance = %s WHERE ID = %s"
+            args = (self.name, self.insurance.hasInsurance(), self.id)  
             db.cursor.execute(sql, args)
             db.connection.commit()
             db.connection.close()
         else:
             db = DataBase()
-            sql = "INSERT INTO USERS (ID, Name, Vaccinations, Insurance) VALUES (%s, %s, %s, %s)"
-            args = (self.id, self.name, len(self.appointments), self.insurance.hasInsurance())
+            sql = "INSERT INTO USERS (ID, Name, Insurance) VALUES (%s, %s, %s, %s)"
+            args = (self.id, self.name, self.insurance.hasInsurance())
             db.cursor.execute(sql, args)
             db.connection.commit()
             db.connection.close()
+
 
 
         
