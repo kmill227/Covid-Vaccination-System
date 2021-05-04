@@ -43,10 +43,6 @@ class Appointment:
         db.cursor.execute(sql, args)
         db.connection.commit()
         db.connection.close()
-    
-    def rescheduleAppointment(self):
-        #remove from database and add new appointment from user input from menu 
-        pass
 
     def validDate(self, date):
         if date.weekday() > 4:
