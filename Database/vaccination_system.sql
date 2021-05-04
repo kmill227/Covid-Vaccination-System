@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2021 at 05:17 AM
+-- Generation Time: May 04, 2021 at 09:52 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -41,10 +41,8 @@ CREATE TABLE `appointment` (
 --
 
 INSERT INTO `appointment` (`AppointmentID`, `UserID`, `Campus`, `AppointmentDate`, `AppointmentTime`, `VaccineBrand`) VALUES
-(1031, 1000, 'Stark', '2021-05-05', '11:00:00', 'Johnson&Johnson'),
-(1032, 1001, 'Geauga', '2021-05-06', '08:00:00', 'Johnson&Johnson'),
-(1033, 1002, 'Kent', '2021-05-07', '11:00:00', 'Pfizer'),
-(1034, 1002, 'Kent', '2021-05-28', '11:00:00', 'Pfizer');
+(1039, 1001, 'Kent', '2021-05-07', '08:00:00', 'Pfizer'),
+(1040, 1001, 'Kent', '2021-05-28', '08:00:00', 'Pfizer');
 
 -- --------------------------------------------------------
 
@@ -60,21 +58,22 @@ CREATE TABLE `campus` (
   `Revenue` int(8) NOT NULL,
   `VaccineBrand` varchar(45) NOT NULL,
   `NumberOrder` int(11) NOT NULL,
-  `deliveryDate` date DEFAULT NULL
+  `deliveryDate` date DEFAULT NULL,
+  `OrderPlaced` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `campus`
 --
 
-INSERT INTO `campus` (`CampusName`, `isRegional`, `VaccinesOnHand`, `VaccinesGiven`, `Revenue`, `VaccineBrand`, `NumberOrder`, `deliveryDate`) VALUES
-('East Liverpool', 1, 50, 0, 0, 'Moderna', 0, NULL),
-('Geauga', 1, 49, 1, 0, 'Johnson&Johnson', 0, NULL),
-('Kent', 0, 148, 1, 0, 'Pfizer', 0, NULL),
-('Salem', 1, 50, 0, 0, 'Pfizer', 0, NULL),
-('Stark', 1, 49, 1, 0, 'Johnson&Johnson', 0, NULL),
-('Trumbull', 1, 50, 0, 0, 'Moderna', 0, NULL),
-('Tuscarawas', 1, 50, 0, 0, 'Pfizer', 0, NULL);
+INSERT INTO `campus` (`CampusName`, `isRegional`, `VaccinesOnHand`, `VaccinesGiven`, `Revenue`, `VaccineBrand`, `NumberOrder`, `deliveryDate`, `OrderPlaced`) VALUES
+('East Liverpool', 1, 50, 0, 0, 'Moderna', 0, NULL, 0),
+('Geauga', 1, 50, 0, 0, 'Johnson&Johnson', 0, NULL, 0),
+('Kent', 0, 148, 1, 120, 'Pfizer', 88, '2021-05-09', 1),
+('Salem', 1, 50, 0, 0, 'Pfizer', 0, NULL, 0),
+('Stark', 1, 50, 0, 0, 'Johnson&Johnson', 0, NULL, 0),
+('Trumbull', 1, 50, 0, 0, 'Moderna', 0, NULL, 0),
+('Tuscarawas', 1, 50, 0, 0, 'Pfizer', 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -119,7 +118,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`ID`, `Name`, `Insurance`) VALUES
 (1000, 'Kaleb Miller', 1),
-(1001, 'John Doe', 1);
+(1001, 'John doe', 1);
 
 --
 -- Indexes for dumped tables
@@ -157,7 +156,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1035;
+  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1041;
 
 --
 -- AUTO_INCREMENT for table `logins`
