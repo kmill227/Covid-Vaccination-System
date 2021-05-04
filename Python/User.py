@@ -1,6 +1,6 @@
 from DataBaseConnection import DataBase
 import tkinter as tk
-from functools import partial
+
 class User: 
     
     def __init__(self): 

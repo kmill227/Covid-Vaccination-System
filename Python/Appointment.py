@@ -1,7 +1,6 @@
 import datetime
 import Campus
 import Vaccine
-import datetime
 from DataBaseConnection import DataBase
 class Appointment:
     def __init__(self):
@@ -38,7 +37,12 @@ class Appointment:
 
     def cancelAppointment(self):
         # remove appointment from database 
-        pass
+        db = DataBase()
+        sql = "DELETE FROM appointment WHERE AppointmentID = %s"
+        args = (self.id, )
+        db.cursor.execute(sql, args)
+        db.connection.commit()
+        db.connection.close()
     
     def rescheduleAppointment(self):
         #remove from database and add new appointment from user input from menu 
